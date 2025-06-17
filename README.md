@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
@@ -83,7 +83,7 @@
   <div class="result" id="resultBox"></div>
 
   <footer>
-    تصميم موبي باص ©<br>
+    تصميم محمد جواد ©<br>
     frn.mohmed.wmobibus@Asiacell.com - 2025
   </footer>
 
