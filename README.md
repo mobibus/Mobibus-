@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -82,7 +82,7 @@
 
   <div class="result" id="resultDisplay"></div>
 
-  <div class="footer">© تصميم موبي باص - frn.mohmed.wmobibus@Asiacell.com - 2025</div>
+  <div class="footer">© تصميم  محمد جواد  - frn.mohmed.wmobibus@Asiacell.com - 2025</div>
 
   <script>
     function calculate() {
