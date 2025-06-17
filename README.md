@@ -1,54 +1,54 @@
-
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>أسياسيل - صرفيات الخط</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>أسياسيل - حاسبة الصرف</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #fff;
+      background: #fff;
       color: #c00;
       text-align: center;
       padding: 20px;
-      direction: rtl;
-      border: 3px solid #c00;
-      max-width: 450px;
-      margin: auto;
-      border-radius: 15px;
+      border: 4px solid #c00;
+      margin: 10px;
+      border-radius: 12px;
     }
-    select, input, button {
+    select, input {
       width: 90%;
       padding: 10px;
-      margin: 10px 0;
+      margin: 10px auto;
       border: 2px solid #c00;
-      border-radius: 8px;
+      border-radius: 6px;
       font-size: 16px;
     }
     button {
+      padding: 12px 20px;
+      font-size: 18px;
       background-color: #c00;
       color: #fff;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      font-weight: bold;
     }
     .result {
       margin-top: 20px;
+      background: #fee;
       padding: 15px;
-      background-color: #fee;
       border-radius: 10px;
-      border: 1px solid #c00;
+      border: 1px solid #f99;
     }
-    .footer {
+    footer {
       margin-top: 30px;
       font-size: 14px;
-      color: gray;
+      color: #777;
     }
   </style>
 </head>
 <body>
-
-  <h1>أسياسيل</h1>
-  <p>صرفيات جميع خطوط أسياسيل</p>
-  <p><small>وادي فون – امتياز شركة أسياسيل</small></p>
+  <h2 style="color: red;">أسياسيل</h2>
+  <p>صرفيات جميع خطوط أسياسيل<br>وادي فون – امتياز شركة أسياسيل</p>
 
   <label>اختر نوع الخط:</label>
   <select id="lineType">
@@ -68,59 +68,61 @@
   </select>
 
   <label>المبلغ (كوين أو دينار):</label>
-  <input type="number" id="amount" placeholder="اكتب المبلغ هنا">
+  <input type="number" id="amount" placeholder="اكتب المبلغ هنا" />
 
   <label>نوع الخدمة:</label>
   <select id="serviceType">
-    <option>الكل</option>
-    <option>الاتصال</option>
-    <option>الانترنت</option>
-    <option>الرسائل</option>
+    <option value="all">الكل</option>
+    <option value="call">📞 الاتصال</option>
+    <option value="data">🌐 الإنترنت</option>
+    <option value="sms">✉️ الرسائل</option>
   </select>
 
   <button onclick="calculate()">احسب الآن</button>
 
-  <div class="result" id="resultDisplay"></div>
+  <div class="result" id="resultBox"></div>
 
-  <div class="footer">© تصميم  محمد جواد  - frn.mohmed.wmobibus@Asiacell.com - 2025</div>
+  <footer>
+    تصميم موبي باص ©<br>
+    frn.mohmed.wmobibus@Asiacell.com - 2025
+  </footer>
 
   <script>
     function calculate() {
-      const lineType = document.getElementById('lineType').value;
-      const serviceType = document.getElementById('serviceType').value;
-      const amount = parseFloat(document.getElementById('amount').value);
+      const line = document.getElementById("lineType").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+      const service = document.getElementById("serviceType").value;
+      const isYooz = line.includes("يوز");
+
+      let callRate = isYooz ? 2 : 2.4; // كوين أو دينار
+      let dataRate = isYooz ? 4 : 4;    // نفس السعر
+      let smsRate = isYooz ? 50 : 50;
+
       let result = "";
 
-      let isYooz = lineType.includes("اليوز");
-      let callRate = isYooz ? 2 : 2.4;
-      let smsRate = isYooz ? 50 : 50;
-      let dataRate = isYooz ? 4 : null;
-
-      if (isNaN(amount) || amount <= 0) {
-        document.getElementById("resultDisplay").innerHTML = "❗ الرجاء إدخال مبلغ صالح";
-        return;
+      if (service === "call" || service === "all") {
+        const callSeconds = amount / callRate;
+        const callMinutes = Math.floor(callSeconds / 60);
+        result += `📞 الاتصال: ${callMinutes} دقيقة<br>`;
       }
 
-      if (serviceType === "الكل" || serviceType === "الاتصال") {
-        let seconds = Math.floor(amount / callRate);
-        let minutes = Math.floor(seconds / 60);
-        result += `📞 الاتصال: ${minutes} دقيقة<br>`;
+      if (service === "data" || service === "all") {
+        const mb = amount / dataRate;
+        if (mb >= 1024) {
+          const gb = (mb / 1024).toFixed(2);
+          result += `🌐 الإنترنت: ${gb} GB (${Math.floor(mb)} MB)<br>`;
+        } else {
+          result += `🌐 الإنترنت: ${Math.floor(mb)} MB<br>`;
+        }
       }
 
-      if ((serviceType === "الكل" || serviceType === "الانترنت") && isYooz) {
-        let mb = Math.floor(amount / dataRate);
-        let gb = Math.floor(mb / 1024);
-        result += `🌐 الإنترنت: ${gb} GB (${mb} MB)<br>`;
+      if (service === "sms" || service === "all") {
+        const smsCount = Math.floor(amount / smsRate);
+        result += `✉️ الرسائل: ${smsCount} رسالة<br>`;
       }
 
-      if (serviceType === "الكل" || serviceType === "الرسائل") {
-        let sms = Math.floor(amount / smsRate);
-        result += `✉️ الرسائل: ${sms} رسالة`;
-      }
-
-      document.getElementById("resultDisplay").innerHTML = result;
+      document.getElementById("resultBox").innerHTML = result || "يرجى إدخال المبلغ!";
     }
   </script>
-
 </body>
 </html>
